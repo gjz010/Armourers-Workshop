@@ -3,7 +3,7 @@ package moe.plushie.armourers_workshop.api.common.capability;
 import moe.plushie.armourers_workshop.api.common.ISkinInventoryContainer;
 import moe.plushie.armourers_workshop.api.common.skin.data.ISkinDescriptor;
 import moe.plushie.armourers_workshop.api.common.skin.type.ISkinType;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 
 public interface IEntitySkinCapability {
@@ -78,7 +78,7 @@ public interface IEntitySkinCapability {
      * 
      * @param entityPlayer Player to sync to.
      */
-    public void syncToPlayer(EntityPlayerMP entityPlayer);
+    public void syncToPlayer(ServerPlayerEntity entityPlayer);
     
     /**
      * Syncs capability data to all players tracking the entity.

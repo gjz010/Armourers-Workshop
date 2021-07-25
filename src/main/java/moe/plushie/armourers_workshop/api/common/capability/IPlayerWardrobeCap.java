@@ -1,13 +1,13 @@
 package moe.plushie.armourers_workshop.api.common.capability;
 
 import moe.plushie.armourers_workshop.api.common.skin.type.ISkinType;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 
 public interface IPlayerWardrobeCap extends IWardrobeCap {
     
-    public boolean getArmourOverride(EntityEquipmentSlot equipmentSlot);
+    public boolean getArmourOverride(EquipmentSlotType equipmentSlot);
     
-    public void setArmourOverride(EntityEquipmentSlot equipmentSlot, boolean override);
+    public void setArmourOverride(EquipmentSlotType equipmentSlot, boolean override);
     
     public int getUnlockedSlotsForSkinType(ISkinType skinType);
     

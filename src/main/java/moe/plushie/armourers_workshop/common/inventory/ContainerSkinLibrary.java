@@ -15,7 +15,7 @@ import moe.plushie.armourers_workshop.utils.SkinNBTHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -98,8 +98,8 @@ public class ContainerSkinLibrary extends ModTileContainer<TileEntitySkinLibrary
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
         for (Object player : listeners) {
-            if (player instanceof EntityPlayerMP) {
-                EntityPlayerMP playerMp = (EntityPlayerMP) player;
+            if (player instanceof ServerPlayerEntity) {
+                ServerPlayerEntity playerMp = (ServerPlayerEntity) player;
                 ArmourersWorkshop.getProxy().getLibraryManager().syncLibraryWithPlayer(playerMp);
             }
         }

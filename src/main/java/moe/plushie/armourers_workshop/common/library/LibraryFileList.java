@@ -11,7 +11,7 @@ import moe.plushie.armourers_workshop.common.network.PacketHandler;
 import moe.plushie.armourers_workshop.common.network.messages.server.MessageServerLibraryFileList;
 import moe.plushie.armourers_workshop.common.skin.type.SkinTypeRegistry;
 import moe.plushie.armourers_workshop.utils.ModLogger;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
@@ -132,7 +132,7 @@ public class LibraryFileList {
         markDirty();
     }
 
-    public void syncFileListWithPlayer(EntityPlayerMP player) {
+    public void syncFileListWithPlayer(ServerPlayerEntity player) {
         synchronized (this.syncedClients) {
             if (!syncedClients.contains(player.getUniqueID())) {
                 syncedClients.add(player.getUniqueID());

@@ -1,5 +1,8 @@
 package moe.plushie.armourers_workshop;
 
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 import org.apache.logging.log4j.Logger;
 
 import moe.plushie.armourers_workshop.common.command.CommandArmourers;
@@ -19,7 +22,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
 
-@Mod(modid = LibModInfo.ID, name = LibModInfo.NAME, version = LibModInfo.MOD_VERSION, guiFactory = LibModInfo.GUI_FACTORY_CLASS, dependencies = LibModInfo.DEPENDENCIES, acceptedMinecraftVersions = LibModInfo.MC_VERSION, updateJSON = LibModInfo.UPDATE_URL)
+//@Mod(modid = LibModInfo.ID, name = LibModInfo.NAME, version = LibModInfo.MOD_VERSION, guiFactory = LibModInfo.GUI_FACTORY_CLASS, dependencies = LibModInfo.DEPENDENCIES, acceptedMinecraftVersions = LibModInfo.MC_VERSION, updateJSON = LibModInfo.UPDATE_URL)
+@Mod("armourers_workshop")
 public class ArmourersWorkshop {
 
     /*
@@ -41,7 +45,7 @@ public class ArmourersWorkshop {
     public static final CreativeTabMain TAB_MAIN = new CreativeTabMain();
     public static final CreativeTabPaintingTools TAB_PAINTING_TOOLS = new CreativeTabPaintingTools();
 
-    @EventHandler
+    @SubscribeEvent
     public void perInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();
         ModLogger.log(String.format("Loading %s version %s.", LibModInfo.NAME, LibModInfo.MOD_VERSION));
@@ -49,25 +53,25 @@ public class ArmourersWorkshop {
         proxy.initLibraryManager();
     }
 
-    @EventHandler
+    @SubscribeEvent
     public void init(FMLInitializationEvent event) {
         proxy.init(event);
         proxy.registerKeyBindings();
         proxy.initRenderers();
     }
 
-    @EventHandler
+    @SubscribeEvent
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
     }
 
-    @EventHandler
+    @SubscribeEvent
     public void serverStart(FMLServerStartingEvent event) {
-        event.registerServerCommand(new CommandArmourers());
+        event.getServer().getCommands().getDispatcher().registerServerCommand(new CommandArmourers());
         CommonSkinCache.INSTANCE.serverStarted();
     }
 
-    @EventHandler
+    @SubscribeEvent
     public void serverStopped(FMLServerStoppedEvent event) {
         CommonSkinCache.INSTANCE.serverStopped();
     }

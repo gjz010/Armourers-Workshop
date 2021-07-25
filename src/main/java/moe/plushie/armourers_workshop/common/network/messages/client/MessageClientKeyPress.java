@@ -5,7 +5,7 @@ import moe.plushie.armourers_workshop.ArmourersWorkshop;
 import moe.plushie.armourers_workshop.common.config.ConfigHandler;
 import moe.plushie.armourers_workshop.common.lib.EnumGuiId;
 import moe.plushie.armourers_workshop.common.world.undo.UndoManager;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
@@ -37,7 +37,7 @@ public class MessageClientKeyPress implements IMessage, IMessageHandler<MessageC
     @Override
     public IMessage onMessage(MessageClientKeyPress message, MessageContext ctx) {
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-        EntityPlayerMP player = ctx.getServerHandler().player;
+        ServerPlayerEntity player = ctx.getServerHandler().player;
         server.addScheduledTask(new Runnable() {
             @Override
             public void run() {

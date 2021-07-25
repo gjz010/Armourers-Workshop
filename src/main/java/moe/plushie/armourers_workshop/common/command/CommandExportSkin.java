@@ -3,6 +3,11 @@ package moe.plushie.armourers_workshop.common.command;
 import java.io.File;
 import java.util.List;
 
+import com.mojang.brigadier.arguments.FloatArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import moe.plushie.armourers_workshop.ArmourersWorkshop;
 import moe.plushie.armourers_workshop.client.skin.cache.ClientSkinCache;
 import moe.plushie.armourers_workshop.common.skin.data.Skin;
@@ -11,12 +16,16 @@ import moe.plushie.armourers_workshop.common.skin.exporter.ISkinExporter;
 import moe.plushie.armourers_workshop.common.skin.exporter.SkinExportManager;
 import moe.plushie.armourers_workshop.utils.SkinNBTHelper;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.command.CommandSource;
+import net.minecraft.command.Commands;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.StringTextComponent;
+
+import static com.mojang.brigadier.arguments.FloatArgumentType.getFloat;
+import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 
 public class CommandExportSkin extends ModCommand {
 
@@ -25,68 +34,43 @@ public class CommandExportSkin extends ModCommand {
     }
 
     @Override
-    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos targetPos) {
-        if (args.length == 2) {
-            return getListOfStringsMatchingLastWord(args, SkinExportManager.getExporters());
-        }
-        return super.getTabCompletions(server, sender, args, targetPos);
+    public LiteralArgumentBuilder<CommandSource> buildCommand() {
+        return Commands.literal(this.getName()).then(
+                Commands.argument("extension", StringArgumentType.string()).then(
+                        Commands.argument("name", StringArgumentType.string())
+                                .then(Commands.argument("scale", FloatArgumentType.floatArg())
+                                        .executes((x)->this.executeWithScale(x, getFloat(x, "scale"))))
+                                .executes((x)->this.executeWithScale(x, 0.0625f))
+                ));
     }
 
-    @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        if (args.length < 3) {
-            throw new WrongUsageException(getUsage(sender), (Object) args);
-        }
-        EntityPlayerMP player = getCommandSenderAsPlayer(sender);
-        if (player == null) {
-            return;
-        }
+    protected int executeWithScale(CommandContext<CommandSource> source, float scale) throws CommandException, CommandSyntaxException {
+
+        ServerPlayerEntity player = source.getSource().getPlayerOrException();
 
         // Check if the player is holding a valid skin.
-        ItemStack stack = player.getHeldItemMainhand();
+        ItemStack stack = player.getMainHandItem();
         SkinDescriptor skinPointer = SkinNBTHelper.getSkinDescriptorFromStack(stack);
         if (skinPointer == null) {
-            throw new WrongUsageException(getUsage(sender), (Object) args);
+            throw new CommandException(new StringTextComponent("bad hand item"));
         }
 
         // Get export file extension.
-        String fileExtension = args[1];
+        String fileExtension = getString(source, "extension");
         ISkinExporter skinExporter = SkinExportManager.getSkinExporter(fileExtension);
         if (skinExporter == null) {
-            throw new WrongUsageException(getUsage(sender), (Object) args);
+            throw new CommandException(new StringTextComponent("bad extension"));
         }
 
         // Get export file name.
-        String exportName = args[2];
-        if (!exportName.substring(0, 1).equals("\"")) {
-            throw new WrongUsageException(getUsage(sender), (Object) exportName);
-        }
-        int usedCommands = 2;
-        if (!exportName.substring(exportName.length() - 1, exportName.length()).equals("\"")) {
-            for (int i = 3; i < args.length; i++) {
-                exportName += " " + args[i];
-                if (exportName.substring(exportName.length() - 1, exportName.length()).equals("\"")) {
-                    usedCommands = i;
-                    break;
-                }
-            }
-        }
-        if (!exportName.substring(exportName.length() - 1, exportName.length()).equals("\"")) {
-            throw new WrongUsageException(getUsage(sender), (Object) exportName);
-        }
-        exportName = exportName.replace("\"", "");
+        String exportName = getString(source, "name");
 
         // Add the scale
-        float scale = 0.0625F;
-        if (args.length > usedCommands + 1) {
-            scale = (float) parseDouble(args[usedCommands + 1]);
-        }
-
         // Get the skin from the cache.
         // TODO Fix client call.
         Skin skin = ClientSkinCache.INSTANCE.getSkin(skinPointer);
         if (skin == null) {
-            throw new WrongUsageException(getUsage(sender), (Object) args);
+            throw new CommandException(new StringTextComponent("bad skin"));
         }
 
         // Creating the export directory.
@@ -96,5 +80,6 @@ public class CommandExportSkin extends ModCommand {
         }
 
         SkinExportManager.exportSkin(skin, skinExporter, exportDir, exportName, scale);
+        return 0;
     }
 }

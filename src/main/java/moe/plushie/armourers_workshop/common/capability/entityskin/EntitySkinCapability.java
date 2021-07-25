@@ -17,7 +17,7 @@ import moe.plushie.armourers_workshop.common.skin.data.SkinDescriptor;
 import moe.plushie.armourers_workshop.utils.SkinNBTHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -182,7 +182,7 @@ public class EntitySkinCapability implements IEntitySkinCapability, IInventoryCa
     }
     
     @Override
-    public void syncToPlayer(EntityPlayerMP entityPlayer) {
+    public void syncToPlayer(ServerPlayerEntity entityPlayer) {
         PacketHandler.networkWrapper.sendTo(getUpdateMessage(), entityPlayer);
     }
 

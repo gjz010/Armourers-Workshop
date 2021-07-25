@@ -2,7 +2,7 @@ package moe.plushie.armourers_workshop.common.network.messages.client;
 
 import io.netty.buffer.ByteBuf;
 import moe.plushie.armourers_workshop.common.inventory.ContainerArmourer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.Container;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -35,7 +35,7 @@ public class MessageClientLoadArmour implements IMessage, IMessageHandler<Messag
     
     @Override
     public IMessage onMessage(MessageClientLoadArmour message, MessageContext ctx) {
-        EntityPlayerMP player = ctx.getServerHandler().player;
+        ServerPlayerEntity player = ctx.getServerHandler().player;
         if (player == null) { return null; }
         Container container = player.openContainer;
 

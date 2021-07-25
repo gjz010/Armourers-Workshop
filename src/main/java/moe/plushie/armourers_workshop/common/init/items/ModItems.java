@@ -12,7 +12,7 @@ import moe.plushie.armourers_workshop.common.init.items.paintingtool.ItemPaintRo
 import moe.plushie.armourers_workshop.common.init.items.paintingtool.ItemPaintbrush;
 import moe.plushie.armourers_workshop.common.init.items.paintingtool.ItemShadeNoiseTool;
 import moe.plushie.armourers_workshop.common.lib.LibItemNames;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
@@ -56,10 +56,10 @@ public class ModItems {
 
     public ModItems() {
         MinecraftForge.EVENT_BUS.register(this);
-        ARMOUR_CONTAINER[0] = new ItemArmourContainer(LibItemNames.ARMOUR_CONTAINER_HEAD, EntityEquipmentSlot.HEAD);
-        ARMOUR_CONTAINER[1] = new ItemArmourContainer(LibItemNames.ARMOUR_CONTAINER_CHEST, EntityEquipmentSlot.CHEST);
-        ARMOUR_CONTAINER[2] = new ItemArmourContainer(LibItemNames.ARMOUR_CONTAINER_LEGS, EntityEquipmentSlot.LEGS);
-        ARMOUR_CONTAINER[3] = new ItemArmourContainer(LibItemNames.ARMOUR_CONTAINER_FEET, EntityEquipmentSlot.FEET);
+        ARMOUR_CONTAINER[0] = new ItemArmourContainer(LibItemNames.ARMOUR_CONTAINER_HEAD, EquipmentSlotType.HEAD);
+        ARMOUR_CONTAINER[1] = new ItemArmourContainer(LibItemNames.ARMOUR_CONTAINER_CHEST, EquipmentSlotType.CHEST);
+        ARMOUR_CONTAINER[2] = new ItemArmourContainer(LibItemNames.ARMOUR_CONTAINER_LEGS, EquipmentSlotType.LEGS);
+        ARMOUR_CONTAINER[3] = new ItemArmourContainer(LibItemNames.ARMOUR_CONTAINER_FEET, EquipmentSlotType.FEET);
     }
 
     @SubscribeEvent

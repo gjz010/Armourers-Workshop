@@ -1,14 +1,14 @@
 package moe.plushie.armourers_workshop.common.skin.cache;
 
 import moe.plushie.armourers_workshop.api.common.skin.data.ISkinIdentifier;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 
 public class SkinRequestMessage {
     
     private final ISkinIdentifier skinIdentifier;
-    private final EntityPlayerMP player;
+    private final ServerPlayerEntity player;
     
-    public SkinRequestMessage(ISkinIdentifier skinIdentifier, EntityPlayerMP player) {
+    public SkinRequestMessage(ISkinIdentifier skinIdentifier, ServerPlayerEntity player) {
         this.skinIdentifier = skinIdentifier;
         this.player = player;
     }
@@ -17,7 +17,7 @@ public class SkinRequestMessage {
         return skinIdentifier;
     }
     
-    public EntityPlayerMP getPlayer() {
+    public ServerPlayerEntity getPlayer() {
         return player;
     }
 }

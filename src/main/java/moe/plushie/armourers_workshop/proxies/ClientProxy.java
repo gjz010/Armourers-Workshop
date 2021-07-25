@@ -212,19 +212,19 @@ public class ClientProxy extends CommonProxy implements IBakedSkinReceiver {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAdvancedSkinBuilder.class, new RenderBlockAdvancedSkinBuilder());
 
         // Register coloured items and blocks.
-        Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemColour(), ModItems.PAINT_BRUSH);
-        Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemColour(), ModItems.PAINT_ROLLER);
-        Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemColour(), ModItems.COLOUR_PICKER);
-        Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemColour(), ModItems.DYE_BOTTLE);
-        Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemColour(), ModItems.HUE_TOOL);
-        Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemColour(), ModItems.SOAP);
-        Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemColour(), ModItems.GIFT_SACK);
+        Minecraft.getInstance().getItemColors().registerItemColorHandler(new ItemColour(), ModItems.PAINT_BRUSH);
+        Minecraft.getInstance().getItemColors().registerItemColorHandler(new ItemColour(), ModItems.PAINT_ROLLER);
+        Minecraft.getInstance().getItemColors().registerItemColorHandler(new ItemColour(), ModItems.COLOUR_PICKER);
+        Minecraft.getInstance().getItemColors().registerItemColorHandler(new ItemColour(), ModItems.DYE_BOTTLE);
+        Minecraft.getInstance().getItemColors().registerItemColorHandler(new ItemColour(), ModItems.HUE_TOOL);
+        Minecraft.getInstance().getItemColors().registerItemColorHandler(new ItemColour(), ModItems.SOAP);
+        Minecraft.getInstance().getItemColors().registerItemColorHandler(new ItemColour(), ModItems.GIFT_SACK);
 
-        Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new BlockColour(), ModBlocks.SKIN_CUBE);
-        Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new BlockColour(), ModBlocks.SKIN_CUBE_GLASS);
-        Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new BlockColour(), ModBlocks.SKIN_CUBE_GLOWING);
-        Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new BlockColour(), ModBlocks.SKIN_CUBE_GLASS_GLOWING);
-        Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new BlockColour(), ModBlocks.COLOUR_MIXER);
+        Minecraft.getInstance().getBlockColors().registerBlockColorHandler(new BlockColour(), ModBlocks.SKIN_CUBE);
+        Minecraft.getInstance().getBlockColors().registerBlockColorHandler(new BlockColour(), ModBlocks.SKIN_CUBE_GLASS);
+        Minecraft.getInstance().getBlockColors().registerBlockColorHandler(new BlockColour(), ModBlocks.SKIN_CUBE_GLOWING);
+        Minecraft.getInstance().getBlockColors().registerBlockColorHandler(new BlockColour(), ModBlocks.SKIN_CUBE_GLASS_GLOWING);
+        Minecraft.getInstance().getBlockColors().registerBlockColorHandler(new BlockColour(), ModBlocks.COLOUR_MIXER);
 
     }
 

@@ -8,7 +8,7 @@ import moe.plushie.armourers_workshop.common.network.messages.client.MessageClie
 import moe.plushie.armourers_workshop.common.network.messages.server.MessageServerSyncWardrobeCap;
 import moe.plushie.armourers_workshop.common.skin.data.SkinDye;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -63,7 +63,7 @@ public class WardrobeCap implements IWardrobeCap {
     }
 
     @Override
-    public void syncToPlayer(EntityPlayerMP entityPlayer) {
+    public void syncToPlayer(ServerPlayerEntity entityPlayer) {
         PacketHandler.networkWrapper.sendTo(getUpdateMessage(), entityPlayer);
     }
 

@@ -14,7 +14,7 @@ import moe.plushie.armourers_workshop.client.lib.LibGuiResources;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -43,7 +43,7 @@ public class GuiTabWardrobeDisplaySettings extends GuiTabPanel {
         this.wardrobeCapability = wardrobeCapability;
         armourOverride = new boolean[4];
         for (int i = 0; i < armourOverride.length; i++) {
-            EntityEquipmentSlot slot = EntityEquipmentSlot.values()[i + 2];
+            EquipmentSlotType slot = EquipmentSlotType.values()[i + 2];
             armourOverride[i] = wardrobeCapability.getArmourOverride(slot);
         }
     }
@@ -73,7 +73,7 @@ public class GuiTabWardrobeDisplaySettings extends GuiTabPanel {
         
         if (button.id >= 1) {
             for (int i = 0; i < armourOverride.length; i++) {
-                EntityEquipmentSlot slot = EntityEquipmentSlot.values()[i + 2];
+                EquipmentSlotType slot = EquipmentSlotType.values()[i + 2];
                 wardrobeCapability.setArmourOverride(slot, armourOverride[i]);
             }
             wardrobeCapability.sendUpdateToServer();

@@ -11,7 +11,7 @@ import moe.plushie.armourers_workshop.ArmourersWorkshop;
 import moe.plushie.armourers_workshop.common.lib.LibModInfo;
 import moe.plushie.armourers_workshop.utils.ModLogger;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 
 /**
  * 
@@ -157,7 +157,7 @@ public class CommonLibraryManager implements ILibraryManager {
     }
     
     @Override
-    public void syncLibraryWithPlayer(EntityPlayerMP player) {
+    public void syncLibraryWithPlayer(ServerPlayerEntity player) {
         serverPublicFiles.syncFileListWithPlayer(player);
         LibraryFileList privateList = serverPrivateFiles.get(player.getUniqueID());
         if (privateList != null) {

@@ -6,7 +6,7 @@ import moe.plushie.armourers_workshop.api.common.painting.IPantableBlock;
 import moe.plushie.armourers_workshop.common.painting.PaintTypeRegistry;
 import moe.plushie.armourers_workshop.common.world.undo.UndoManager;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -53,7 +53,7 @@ public class MessageClientToolPaintBlock implements IMessage, IMessageHandler<Me
     
     @Override
     public IMessage onMessage(MessageClientToolPaintBlock message, MessageContext ctx) {
-        EntityPlayerMP player = ctx.getServerHandler().player;
+        ServerPlayerEntity player = ctx.getServerHandler().player;
         if (player != null && player.getEntityWorld() != null) {
             World world = player.getEntityWorld();
             BlockPos pos = new BlockPos(message.x, message.y, message.z);

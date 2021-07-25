@@ -6,17 +6,28 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import moe.plushie.armourers_workshop.api.common.IExtraColours.ExtraColourType;
 import moe.plushie.armourers_workshop.api.common.capability.IPlayerWardrobeCap;
 import moe.plushie.armourers_workshop.common.capability.wardrobe.player.PlayerWardrobeCap;
 import moe.plushie.armourers_workshop.common.command.ModCommand;
 import moe.plushie.armourers_workshop.utils.ModLogger;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.command.arguments.EntityArgument;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.server.command.EnumArgument;
+
+import static com.mojang.brigadier.arguments.StringArgumentType.getString;
+import static net.minecraft.command.Commands.argument;
+import static net.minecraft.command.Commands.literal;
+import static net.minecraft.command.arguments.EntityArgument.getPlayer;
 
 public class CommandWardrobeSetColour extends ModCommand {
 
@@ -25,33 +36,24 @@ public class CommandWardrobeSetColour extends ModCommand {
     }
 
     @Override
-    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos targetPos) {
-        if (args.length == getParentCount() + 1) {
-            return getListOfStringsMatchingLastWord(args, getPlayers(server));
-        }
-        if (args.length == getParentCount() + 2) {
-            ArrayList<String> types = new ArrayList<String>();
-            for (ExtraColourType type : ExtraColourType.values()) {
-                types.add(type.toString().toLowerCase());
-            }
-            return types;
-        }
-        return super.getTabCompletions(server, sender, args, targetPos);
+    public LiteralArgumentBuilder buildCommand(){
+        EnumArgument<ExtraColourType> extraColourTypeEnumArgument = EnumArgument.enumArgument(ExtraColourType.class);
+        return literal(this.getName()).then(
+                argument("player", EntityArgument.players()).then(
+                        argument("extra_colour_type", extraColourTypeEnumArgument).then(
+                                argument("dye", StringArgumentType.string()).executes((x)->this.execute(x))
+                        )
+                ));
     }
+
 
     // Arguments 3 - <player> <extra colour type> <dye>
     @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        if (args.length != getParentCount() + 3) {
-            throw new WrongUsageException(getUsage(sender), (Object) args);
-        }
+    public int execute(CommandContext ctx) throws CommandException, CommandSyntaxException {
+        ServerPlayerEntity player = getPlayer(ctx, "player");
+        ExtraColourType colourType = (ExtraColourType) ctx.getArgument("extra_colour_type", ExtraColourType.class);
+        String argDye = getString(ctx, "dye");
 
-        String argPlayer = args[getParentCount()];
-        String argColourType = args[getParentCount() + 1];
-        String argDye = args[getParentCount() + 2];
-
-        EntityPlayerMP player = getPlayer(server, sender, argPlayer);
-        ExtraColourType colourType = ExtraColourType.valueOf(argColourType.toUpperCase());
         Color colour = null;
 
         if (argDye.startsWith("#") && argDye.length() == 7) {
@@ -62,27 +64,28 @@ public class CommandWardrobeSetColour extends ModCommand {
                 int b = dyeColour.getBlue();
                 colour = new Color(r, g, b, 255);
             } else {
-                throw new WrongUsageException(getFullName() + ".invalidColourFormat", (Object) argDye);
+                throw new CommandException(new StringTextComponent(getFullName() + ".invalidColourFormat" +argDye));
             }
         } else if (argDye.length() >= 5 & argDye.contains(",")) {
             String dyeValues[] = argDye.split(",");
             if (dyeValues.length != 3) {
-                throw new WrongUsageException(getUsage(sender), (Object) argDye);
+                throw new CommandException(new StringTextComponent(getFullName() + ".badcolor" +argDye));
             }
             int r = parseInt(dyeValues[0], 0, 255);
             int g = parseInt(dyeValues[1], 0, 255);
             int b = parseInt(dyeValues[2], 0, 255);
             colour = new Color(r, g, b, 255);
         } else {
-            throw new WrongUsageException(getFullName() + ".invalidColourFormat", (Object) argDye);
+            throw new CommandException(new StringTextComponent(getFullName() + ".invalidColourFormat" +  argDye));
         }
 
-        IPlayerWardrobeCap wardrobeCap = PlayerWardrobeCap.get(player);
+        IPlayerWardrobeCap wardrobeCap = (IPlayerWardrobeCap) PlayerWardrobeCap.get(player);
         if (wardrobeCap != null) {
             wardrobeCap.getExtraColours().setColour(colourType, colour.getRGB());
             wardrobeCap.syncToPlayer(player);
             wardrobeCap.syncToAllTracking();
         }
+        return 0;
     }
 
     private boolean isValidHex(String colorStr) {

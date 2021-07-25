@@ -17,7 +17,7 @@ import moe.plushie.armourers_workshop.common.network.PacketHandler;
 import moe.plushie.armourers_workshop.common.network.messages.client.MessageClientRequestGameProfile;
 import moe.plushie.armourers_workshop.common.network.messages.server.MessageServerGameProfile;
 import moe.plushie.armourers_workshop.proxies.CommonProxy;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.StringUtils;
 
 public final class GameProfileCache {
@@ -98,7 +98,7 @@ public final class GameProfileCache {
         }
     }
     
-    public static void onClientRequstProfile(EntityPlayerMP playerEntity, GameProfile gameProfile) {
+    public static void onClientRequstProfile(ServerPlayerEntity playerEntity, GameProfile gameProfile) {
         synchronized (waitingClients) {
             GameProfile cacheProfile = downloadedCache.get(gameProfile.getName());
             if (cacheProfile != null) {
@@ -111,21 +111,21 @@ public final class GameProfileCache {
         getGameProfile(gameProfile, null);
     }
     
-    private static void sendProfileToClient(EntityPlayerMP playerEntity, GameProfile gameProfile) {
+    private static void sendProfileToClient(ServerPlayerEntity playerEntity, GameProfile gameProfile) {
         PacketHandler.networkWrapper.sendTo(new MessageServerGameProfile(gameProfile), playerEntity);
     }
     
     public static class WaitingClient {
         
-        private EntityPlayerMP entityPlayer;
+        private ServerPlayerEntity entityPlayer;
         private String profileName;
         
-        public WaitingClient(EntityPlayerMP entityPlayer, String profileName) {
+        public WaitingClient(ServerPlayerEntity entityPlayer, String profileName) {
             this.entityPlayer = entityPlayer;
             this.profileName = profileName;
         }
         
-        public EntityPlayerMP getEntityPlayer() {
+        public ServerPlayerEntity getEntityPlayer() {
             return entityPlayer;
         }
         

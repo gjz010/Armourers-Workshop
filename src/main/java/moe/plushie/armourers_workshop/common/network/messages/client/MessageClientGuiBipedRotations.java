@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import moe.plushie.armourers_workshop.common.data.type.BipedRotations;
 import moe.plushie.armourers_workshop.common.inventory.ContainerMannequin;
 import moe.plushie.armourers_workshop.common.tileentities.TileEntityMannequin;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.Container;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -34,7 +34,7 @@ public class MessageClientGuiBipedRotations implements IMessage, IMessageHandler
     
     @Override
     public IMessage onMessage(MessageClientGuiBipedRotations message, MessageContext ctx) {
-        EntityPlayerMP player = ctx.getServerHandler().player;
+        ServerPlayerEntity player = ctx.getServerHandler().player;
 
         if (player == null) {
             return null;

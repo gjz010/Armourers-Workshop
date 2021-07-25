@@ -3,23 +3,39 @@ package moe.plushie.armourers_workshop.common.command;
 import java.util.Arrays;
 import java.util.List;
 
+import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import moe.plushie.armourers_workshop.common.addons.ModAddonManager.ItemOverrideType;
+import moe.plushie.armourers_workshop.common.command.wardrobe.CommandWardrobeSetOption;
 import moe.plushie.armourers_workshop.common.config.ConfigHandlerOverrides;
 import moe.plushie.armourers_workshop.utils.ModLogger;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.command.CommandSource;
+import net.minecraft.command.arguments.EntityArgument;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.server.command.EnumArgument;
+
+import static net.minecraft.command.Commands.argument;
+import static net.minecraft.command.Commands.literal;
 
 public class CommandSetItemAsSkinnable extends ModCommand {
 
     public CommandSetItemAsSkinnable(ModCommand parent) {
         super(parent, "set_item_skinnable");
     }
-
+    private enum Op{
+        add(0),remove(1);
+        public final int val;
+        private Op(int val){
+            this.val=val;
+        }
+    }
+    /*
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos targetPos) {
         if (args.length == 2) {
@@ -35,32 +51,31 @@ public class CommandSetItemAsSkinnable extends ModCommand {
         }
         return null;
     }
-
+*/
     @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        if (args.length != 3) {
-            throw new WrongUsageException(getUsage(sender), (Object) args);
-        }
-        EntityPlayerMP player = getCommandSenderAsPlayer(sender);
-        if (player == null) {
-            return;
-        }
-        ModLogger.log(Arrays.toString(args));
-        ItemOverrideType type = null;
-        try {
-            type = ItemOverrideType.valueOf(args[1].toUpperCase());
-        } catch (Exception e) {
-            throw new WrongUsageException(getUsage(sender), (Object) args);
-        }
-        ItemStack stack = player.getHeldItemMainhand();
+    public LiteralArgumentBuilder buildCommand(){
+        EnumArgument<ItemOverrideType> itemOverrideTypeEnumArgument = EnumArgument.enumArgument(ItemOverrideType.class);
+        EnumArgument<Op> opEnumArgument = EnumArgument.enumArgument(Op.class);
+        return literal(this.getName()).then(
+                argument("player", EntityArgument.players()).then(
+                        argument("type", itemOverrideTypeEnumArgument).then(
+                                argument("op", opEnumArgument).executes((x)->this.execute(x))
+                        )
+                ));
+    }
+    @Override
+    public int execute(CommandContext<CommandSource> ctx) throws CommandException, CommandSyntaxException {
+        ServerPlayerEntity player =EntityArgument.getPlayer(ctx, "player");
+        ItemOverrideType type=ctx.getArgument("type", ItemOverrideType.class);
+        Op op = ctx.getArgument("op", Op.class);
+        ItemStack stack = player.getMainHandItem();
         if (!stack.isEmpty()) {
-            if (args[2].equals("add")) {
+            if (op.equals(Op.add)) {
                 ConfigHandlerOverrides.addOverride(type, stack.getItem());
-            } else if (args[2].equals("remove")) {
+            } else if (op.equals(Op.remove)) {
                 ConfigHandlerOverrides.removeOverride(type, stack.getItem());
-            } else {
-                throw new WrongUsageException(getUsage(sender), (Object) args);
             }
         }
+        return 0;
     }
 }

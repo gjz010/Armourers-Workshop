@@ -3,6 +3,11 @@ package moe.plushie.armourers_workshop.common.command.wardrobe;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import moe.plushie.armourers_workshop.api.common.capability.IPlayerWardrobeCap;
 import moe.plushie.armourers_workshop.api.common.skin.type.ISkinType;
 import moe.plushie.armourers_workshop.common.capability.entityskin.EntitySkinCapability;
@@ -11,12 +16,15 @@ import moe.plushie.armourers_workshop.common.command.ModCommand;
 import moe.plushie.armourers_workshop.common.skin.type.SkinTypeRegistry;
 import moe.plushie.armourers_workshop.utils.ModLogger;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.command.arguments.EntityArgument;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.StringUtils;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.StringTextComponent;
+
+import static net.minecraft.command.Commands.argument;
+import static net.minecraft.command.Commands.literal;
 
 public class CommandWardrobeSetUnlockedSlots extends ModCommand {
 
@@ -25,56 +33,36 @@ public class CommandWardrobeSetUnlockedSlots extends ModCommand {
     }
 
     @Override
-    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos targetPos) {
-        if (args.length == getParentCount() + 1) {
-            return getListOfStringsMatchingLastWord(args, getPlayers(server));
-        }
-        if (args.length == getParentCount() + 2) {
-            ArrayList<ISkinType> skinTypes = SkinTypeRegistry.INSTANCE.getRegisteredSkinTypes();
-            String[] skinTypesNames = new String[skinTypes.size()];
-            for (int i = 0; i < skinTypes.size(); i++) {
-                skinTypesNames[i] = skinTypes.get(i).getRegistryName();
-            }
-            return getListOfStringsMatchingLastWord(args, skinTypesNames);
-        }
-        if (args.length == getParentCount() + 3) {
-            return getListOfStringsMatchingLastWord(args, new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
-        }
-        return super.getTabCompletions(server, sender, args, targetPos);
+    public LiteralArgumentBuilder buildCommand(){
+        return literal(this.getName()).then(
+                argument("player", EntityArgument.players()).then(
+                        argument("skin_name", StringArgumentType.string()).then(
+                            argument("count", IntegerArgumentType.integer(0, EntitySkinCapability.MAX_SLOTS_PER_SKIN_TYPE))
+                                    .executes((x)->this.execute(x))
+                        )
+                ));
     }
 
     // Arguments 3 - <player> <skin type> <count>
     @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        if (args.length != getParentCount() + 3) {
-            throw new WrongUsageException(getUsage(sender), (Object) args);
-        }
-
-        String playerName = args[getParentCount()];
-        EntityPlayerMP player = getPlayer(server, sender, playerName);
-        if (player == null) {
-            return;
-        }
-
-        String skinTypeName = args[getParentCount() + 1];
-        if (StringUtils.isNullOrEmpty(skinTypeName)) {
-            throw new WrongUsageException(getUsage(sender), (Object) args);
-        }
-
-        int count = 3;
-        count = parseInt(args[getParentCount() + 2], 0, EntitySkinCapability.MAX_SLOTS_PER_SKIN_TYPE);
+    public int execute(CommandContext ctx) throws CommandException, CommandSyntaxException {
+        ServerPlayerEntity player = EntityArgument.getPlayer(ctx, "player");
+        String skinTypeName = StringArgumentType.getString(ctx, "skin_name");
+        int count = IntegerArgumentType.getInteger(ctx, "count");
 
         ISkinType skinType = SkinTypeRegistry.INSTANCE.getSkinTypeFromRegistryName(skinTypeName);
         if (skinType == null) {
-            throw new WrongUsageException(getUsage(sender), (Object) args);
+            throw new CommandException(new StringTextComponent("bad skin type: "+skinTypeName));
         }
 
-        IPlayerWardrobeCap wardrobeCap = PlayerWardrobeCap.get(player);
+        IPlayerWardrobeCap wardrobeCap = (IPlayerWardrobeCap) PlayerWardrobeCap.get(player);
         if (wardrobeCap != null) {
             ModLogger.log("setting count " + count + " on " + skinType.getRegistryName());
             wardrobeCap.setUnlockedSlotsForSkinType(skinType, count);
             wardrobeCap.syncToPlayer(player);
             wardrobeCap.syncToAllTracking();
         }
+        return 0;
     }
+
 }

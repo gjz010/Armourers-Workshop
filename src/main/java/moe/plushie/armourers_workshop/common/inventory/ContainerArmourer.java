@@ -22,7 +22,7 @@ import moe.plushie.armourers_workshop.common.tileentities.TileEntityArmourer;
 import moe.plushie.armourers_workshop.common.world.ArmourerWorldHelper;
 import moe.plushie.armourers_workshop.utils.SkinNBTHelper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -74,7 +74,7 @@ public class ContainerArmourer extends ModTileContainer<TileEntityArmourer> impl
      * @param player The player that pressed the save button.
      * @param name   Custom name for the item.
      */
-    public void saveArmourItem(EntityPlayerMP player, String customName, String tags) {
+    public void saveArmourItem(ServerPlayerEntity player, String customName, String tags) {
         if (tileEntity.getWorld().isRemote) {
             return;
         }
@@ -160,7 +160,7 @@ public class ContainerArmourer extends ModTileContainer<TileEntityArmourer> impl
      * 
      * @param player The player that pressed the load button.
      */
-    public void loadArmourItem(EntityPlayerMP player) {
+    public void loadArmourItem(ServerPlayerEntity player) {
         if (tileEntity.getWorld().isRemote) {
             return;
         }
@@ -209,7 +209,7 @@ public class ContainerArmourer extends ModTileContainer<TileEntityArmourer> impl
     }
 
     @Override
-    public void buttonPressed(EntityPlayerMP player, byte buttonId) {
+    public void buttonPressed(ServerPlayerEntity player, byte buttonId) {
         TileEntityArmourer armourerBrain = getTileEntity();
         // ModLogger.log("load " + message.buttonId);
         if (buttonId == 14) {

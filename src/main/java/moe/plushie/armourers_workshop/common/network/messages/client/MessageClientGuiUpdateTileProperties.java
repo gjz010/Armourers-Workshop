@@ -7,7 +7,7 @@ import moe.plushie.armourers_workshop.common.inventory.ModTileContainer;
 import moe.plushie.armourers_workshop.common.tileentities.ModTileEntity;
 import moe.plushie.armourers_workshop.common.tileentities.property.TileProperty;
 import moe.plushie.armourers_workshop.common.tileentities.property.TilePropertyManager;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -51,7 +51,7 @@ public class MessageClientGuiUpdateTileProperties implements IMessage, IMessageH
 
     @Override
     public IMessage onMessage(MessageClientGuiUpdateTileProperties message, MessageContext ctx) {
-        EntityPlayerMP player = ctx.getServerHandler().player;
+        ServerPlayerEntity player = ctx.getServerHandler().player;
         if (player == null) {
             return null;
         }

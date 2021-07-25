@@ -12,7 +12,7 @@ import moe.plushie.armourers_workshop.common.skin.data.Skin;
 import moe.plushie.armourers_workshop.common.skin.data.SkinIdentifier;
 import moe.plushie.armourers_workshop.common.tileentities.TileEntitySkinLibrary;
 import moe.plushie.armourers_workshop.utils.ModLogger;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.Container;
 
 /**
@@ -61,7 +61,7 @@ public final class SkinUploadHelper {
         }
     }
     
-    public static void gotSkinPartFromClient(int skinId, byte packetId, byte[] skinData, EntityPlayerMP player) {
+    public static void gotSkinPartFromClient(int skinId, byte packetId, byte[] skinData, ServerPlayerEntity player) {
         boolean lastPacket = skinData.length < MAX_PACKET_SIZE;
         byte[] oldSkinData = unfinishedSkins.get(skinId);
         

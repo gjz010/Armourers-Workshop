@@ -25,7 +25,7 @@ import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
@@ -255,7 +255,7 @@ public final class ClientWardrobeHandler {
         IPlayerWardrobeCap wardrobeCapability = PlayerWardrobeCap.get(player);
         if (wardrobeCapability != null) {
             for (int i = 0; i < armour.length; i++) {
-                EntityEquipmentSlot slot = EntityEquipmentSlot.values()[i + 2];
+                EquipmentSlotType slot = EquipmentSlotType.values()[i + 2];
                 armour[i] = player.inventory.armorInventory.get(i);
                 if (SkinNBTHelper.stackHasSkinData(armour[i])) {
                 	player.inventory.armorInventory.set(i, ItemStack.EMPTY);

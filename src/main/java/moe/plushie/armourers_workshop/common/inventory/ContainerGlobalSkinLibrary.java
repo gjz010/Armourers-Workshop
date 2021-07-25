@@ -13,7 +13,7 @@ import moe.plushie.armourers_workshop.common.tileentities.TileEntityGlobalSkinLi
 import moe.plushie.armourers_workshop.utils.SkinNBTHelper;
 import moe.plushie.armourers_workshop.utils.UtilItems;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -90,7 +90,7 @@ public class ContainerGlobalSkinLibrary extends ModTileContainer<TileEntityGloba
     }
 
     @Override
-    public void buttonPressed(EntityPlayerMP player, byte buttonId) {
+    public void buttonPressed(ServerPlayerEntity player, byte buttonId) {
         if (buttonId == 0) {
             if (!tileEntity.getWorld().isRemote) {
                 if (!getSlot(37).getHasStack()) {

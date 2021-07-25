@@ -4,7 +4,7 @@ import moe.plushie.armourers_workshop.api.common.skin.type.ISkinType;
 import moe.plushie.armourers_workshop.common.init.items.ModItems;
 import moe.plushie.armourers_workshop.common.skin.data.SkinDescriptor;
 import moe.plushie.armourers_workshop.utils.SkinNBTHelper;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -60,7 +60,7 @@ public class RecipeSkinArmourContainer extends RecipeItemSkinning {
         SkinDescriptor sd = SkinNBTHelper.getSkinDescriptorFromStack(skinStack);
         ISkinType skinType = sd.getIdentifier().getSkinType();
         Item armourItem = armourStack.getItem();
-        if (armourItem.isValidArmor(armourStack, EntityEquipmentSlot.values()[skinType.getVanillaArmourSlotId()], null)) {
+        if (armourItem.isValidArmor(armourStack, EquipmentSlotType.values()[skinType.getVanillaArmourSlotId()], null)) {
             return true;
         }
         return false;

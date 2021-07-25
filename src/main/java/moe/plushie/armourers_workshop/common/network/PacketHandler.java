@@ -32,7 +32,7 @@ import moe.plushie.armourers_workshop.common.network.messages.server.MessageServ
 import moe.plushie.armourers_workshop.common.network.messages.server.MessageServerSyncPlayerWardrobeCap;
 import moe.plushie.armourers_workshop.common.network.messages.server.MessageServerSyncSkinCap;
 import moe.plushie.armourers_workshop.common.network.messages.server.MessageServerSyncWardrobeCap;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -94,10 +94,10 @@ public final class PacketHandler {
 
     private static class DelayedPacket {
         IMessage message;
-        EntityPlayerMP player;
+        ServerPlayerEntity player;
         int delay;
 
-        public DelayedPacket(IMessage message, EntityPlayerMP player, int delay) {
+        public DelayedPacket(IMessage message, ServerPlayerEntity player, int delay) {
             this.message = message;
             this.player = player;
             this.delay = delay;

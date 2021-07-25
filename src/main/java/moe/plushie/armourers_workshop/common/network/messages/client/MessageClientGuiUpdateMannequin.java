@@ -5,7 +5,7 @@ import moe.plushie.armourers_workshop.common.data.type.BipedRotations;
 import moe.plushie.armourers_workshop.common.init.entities.EntityMannequin;
 import moe.plushie.armourers_workshop.common.init.entities.EntityMannequin.TextureData;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -160,7 +160,7 @@ public class MessageClientGuiUpdateMannequin implements IMessage {
 
         @Override
         public IMessage onMessage(MessageClientGuiUpdateMannequin message, MessageContext ctx) {
-            EntityPlayerMP player = ctx.getServerHandler().player;
+            ServerPlayerEntity player = ctx.getServerHandler().player;
             World world = player.getEntityWorld();
             Entity entity = world.getEntityByID(message.id);
 

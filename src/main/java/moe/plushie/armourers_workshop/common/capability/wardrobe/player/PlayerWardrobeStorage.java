@@ -7,7 +7,7 @@ import moe.plushie.armourers_workshop.api.common.capability.IWardrobeCap;
 import moe.plushie.armourers_workshop.api.common.skin.entity.ISkinnableEntity;
 import moe.plushie.armourers_workshop.api.common.skin.type.ISkinType;
 import moe.plushie.armourers_workshop.common.capability.wardrobe.WardrobeCap;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -25,7 +25,7 @@ public class PlayerWardrobeStorage implements IStorage<IPlayerWardrobeCap> {
         IStorage<IWardrobeCap> storage = WardrobeCap.WARDROBE_CAP.getStorage();
         NBTTagCompound compound = (NBTTagCompound) storage.writeNBT(WardrobeCap.WARDROBE_CAP, instance, side);
         for (int i = 0; i < 4; i++) {
-            compound.setBoolean(TAG_ARMOUR_OVERRIDE + i, instance.getArmourOverride(EntityEquipmentSlot.values()[i + 2]));
+            compound.setBoolean(TAG_ARMOUR_OVERRIDE + i, instance.getArmourOverride(EquipmentSlotType.values()[i + 2]));
         }
         ISkinnableEntity skinnableEntity = instance.getSkinnableEntity();
         ArrayList<ISkinType> skinTypes = new ArrayList<ISkinType>(); 
@@ -42,7 +42,7 @@ public class PlayerWardrobeStorage implements IStorage<IPlayerWardrobeCap> {
         IStorage<IWardrobeCap> storage = WardrobeCap.WARDROBE_CAP.getStorage();
         storage.readNBT(WardrobeCap.WARDROBE_CAP, instance, side, compound);
         for (int i = 0; i < 4; i++) {
-            instance.setArmourOverride(EntityEquipmentSlot.values()[i + 2], compound.getBoolean(TAG_ARMOUR_OVERRIDE + i));
+            instance.setArmourOverride(EquipmentSlotType.values()[i + 2], compound.getBoolean(TAG_ARMOUR_OVERRIDE + i));
         }
         ISkinnableEntity skinnableEntity = instance.getSkinnableEntity();
         ArrayList<ISkinType> skinTypes = new ArrayList<ISkinType>(); 

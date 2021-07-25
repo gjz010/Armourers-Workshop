@@ -9,7 +9,7 @@ import moe.plushie.armourers_workshop.common.skin.type.SkinTypeRegistry;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -70,7 +70,7 @@ public class ItemSkinUnlock extends AbstractModItem {
         if (count <= wardrobeCap.getMaxSlotsForSkinType(skinType)) {
             if (!worldIn.isRemote) {
                 wardrobeCap.setUnlockedSlotsForSkinType(skinType, count);
-                wardrobeCap.syncToPlayer((EntityPlayerMP) playerIn);
+                wardrobeCap.syncToPlayer((ServerPlayerEntity) playerIn);
                 wardrobeCap.syncToAllTracking();
                 itemStack.shrink(1);
                 playerIn.sendMessage(new TextComponentTranslation("chat.armourers_workshop:slotUnlocked", unlocalizedSkinName, Integer.toString(count)));

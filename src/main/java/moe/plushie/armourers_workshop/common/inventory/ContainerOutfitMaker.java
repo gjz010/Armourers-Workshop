@@ -25,7 +25,7 @@ import moe.plushie.armourers_workshop.common.skin.type.SkinTypeRegistry;
 import moe.plushie.armourers_workshop.common.tileentities.TileEntityOutfitMaker;
 import moe.plushie.armourers_workshop.utils.SkinNBTHelper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
@@ -202,7 +202,7 @@ public class ContainerOutfitMaker extends ModTileContainer<TileEntityOutfitMaker
     }
 
     @Override
-    public void buttonPressed(EntityPlayerMP player, byte buttonId) {
+    public void buttonPressed(ServerPlayerEntity player, byte buttonId) {
         if (buttonId == 0) {
             loadOutfit();
         }

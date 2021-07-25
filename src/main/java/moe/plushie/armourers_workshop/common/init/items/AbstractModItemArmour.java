@@ -19,7 +19,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -33,7 +33,7 @@ public class AbstractModItemArmour extends ItemArmor implements ISortOrder, ICus
 
     private int sortPriority = 0;
     
-    public AbstractModItemArmour(String name, ArmorMaterial armorMaterial, EntityEquipmentSlot armorType, boolean addCreativeTab) {
+    public AbstractModItemArmour(String name, ArmorMaterial armorMaterial, EquipmentSlotType armorType, boolean addCreativeTab) {
         super(armorMaterial, 2, armorType);
         if (addCreativeTab) {
             setCreativeTab(ArmourersWorkshop.TAB_MAIN);
@@ -96,7 +96,7 @@ public class AbstractModItemArmour extends ItemArmor implements ISortOrder, ICus
     
     @SideOnly(Side.CLIENT)
     @Override
-    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
+    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, ModelBiped _default) {
         if (!SkinNBTHelper.stackHasSkinData(itemStack)) {
             return null;
         }

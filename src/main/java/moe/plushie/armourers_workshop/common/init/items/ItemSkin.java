@@ -34,7 +34,7 @@ import net.minecraft.dispenser.IBehaviorDispenseItem;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -198,7 +198,7 @@ public class ItemSkin extends AbstractModItem {
         if (!worldIn.isRemote) {
             if (skinCapability.canHoldSkinType(descriptor.getIdentifier().getSkinType())) {
                 if (skinCapability.setStackInNextFreeSlot(itemStack.copy())) {
-                    skinCapability.syncToPlayer((EntityPlayerMP) playerIn);
+                    skinCapability.syncToPlayer((ServerPlayerEntity) playerIn);
                     skinCapability.syncToAllTracking();
                     itemStack.shrink(1);
                 }
@@ -229,7 +229,7 @@ public class ItemSkin extends AbstractModItem {
                     if (skinCap.setStackInNextFreeSlot(itemStack.copy())) {
                         itemStack.shrink(1);
                         skinCap.syncToAllTracking();
-                        skinCap.syncToPlayer((EntityPlayerMP) player);
+                        skinCap.syncToPlayer((ServerPlayerEntity) player);
                         return itemStack;
                     }
                 }

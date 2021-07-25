@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import moe.plushie.armourers_workshop.client.texture.PlayerTexture;
 import moe.plushie.armourers_workshop.common.inventory.ContainerArmourer;
 import moe.plushie.armourers_workshop.common.tileentities.TileEntityArmourer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -38,7 +38,7 @@ public class MessageClientGuiSetSkin implements IMessage, IMessageHandler<Messag
     
     @Override
     public IMessage onMessage(MessageClientGuiSetSkin message, MessageContext ctx) {
-        EntityPlayerMP player = ctx.getServerHandler().player;
+        ServerPlayerEntity player = ctx.getServerHandler().player;
         if (player == null) { return null; }
         Container container = player.openContainer;
         if (container == null) { return null; }

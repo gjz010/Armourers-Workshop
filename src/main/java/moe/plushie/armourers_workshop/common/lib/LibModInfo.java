@@ -7,7 +7,7 @@ public class LibModInfo {
     public static final String MOD_VERSION = "@VERSION@";
     //public static final String MOD_VERSION = "1.12.2-0.49.0.397";
     public static final ReleaseType RELEASE_TYPE = ReleaseType.BETA;
-    public static final String MC_VERSION = "1.12.2";
+    public static final String MC_VERSION = "1.16.5";
     public static final String CHANNEL = "arms-ws";
     public static final String DEPENDENCIES = "required-after:forge@[14.23.3.2694,);after:galacticraftcore;";
     public static final boolean DEVELOPMENT_VERSION = true;

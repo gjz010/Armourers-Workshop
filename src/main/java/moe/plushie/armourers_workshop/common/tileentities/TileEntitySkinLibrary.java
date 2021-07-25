@@ -29,7 +29,7 @@ import moe.plushie.armourers_workshop.utils.SkinNBTHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -69,7 +69,7 @@ public class TileEntitySkinLibrary extends AbstractTileEntityInventory implement
      * @param publicFiles If true save to the public file list or false for the
      *                    players private files.
      */
-    public void saveSkin(String fileName, String filePath, EntityPlayerMP player, boolean publicFiles) {
+    public void saveSkin(String fileName, String filePath, ServerPlayerEntity player, boolean publicFiles) {
         ItemStack stackInput = getStackInSlot(0);
         ItemStack stackOutput = getStackInSlot(1);
 
@@ -137,7 +137,7 @@ public class TileEntitySkinLibrary extends AbstractTileEntityInventory implement
      * @param filename The name of the file to load.
      * @param player   The player that pressed the load button.
      */
-    public void loadSkin(String fileName, String filePath, EntityPlayerMP player, boolean trackFile) {
+    public void loadSkin(String fileName, String filePath, ServerPlayerEntity player, boolean trackFile) {
         ItemStack stackInput = getStackInSlot(0);
         ItemStack stackOutput = getStackInSlot(1);
 
@@ -190,7 +190,7 @@ public class TileEntitySkinLibrary extends AbstractTileEntityInventory implement
         this.setInventorySlotContents(1, stackArmour);
     }
 
-    public void sendSkinToClient(String filename, String filePath, EntityPlayerMP player) {
+    public void sendSkinToClient(String filename, String filePath, ServerPlayerEntity player) {
         if (!ConfigHandler.allowDownloadingSkins) {
             return;
         }
@@ -234,7 +234,7 @@ public class TileEntitySkinLibrary extends AbstractTileEntityInventory implement
         this.setInventorySlotContents(1, stackInput);
     }
 
-    public void loadClientSkin(Skin skin, EntityPlayerMP player) {
+    public void loadClientSkin(Skin skin, ServerPlayerEntity player) {
         ItemStack stackInput = getStackInSlot(0);
         ItemStack stackOutput = getStackInSlot(1);
 

@@ -2,15 +2,22 @@ package moe.plushie.armourers_workshop.common.command.wardrobe;
 
 import java.util.List;
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import moe.plushie.armourers_workshop.api.common.capability.IEntitySkinCapability;
 import moe.plushie.armourers_workshop.common.capability.entityskin.EntitySkinCapability;
 import moe.plushie.armourers_workshop.common.command.ModCommand;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.command.arguments.EntityArgument;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+
+import static com.mojang.brigadier.arguments.StringArgumentType.getString;
+import static net.minecraft.command.Commands.argument;
+import static net.minecraft.command.Commands.literal;
+import static net.minecraft.command.arguments.EntityArgument.getPlayer;
 
 public class CommandWardrobeClearSkins extends ModCommand {
 
@@ -19,24 +26,16 @@ public class CommandWardrobeClearSkins extends ModCommand {
     }
 
     @Override
-    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos targetPos) {
-        if (args.length == getParentCount() + 1) {
-            return getListOfStringsMatchingLastWord(args, getPlayers(server));
-        }
-        return super.getTabCompletions(server, sender, args, targetPos);
+    public LiteralArgumentBuilder buildCommand(){
+        return literal(this.getName()).then(argument("player", EntityArgument.players()).executes((x)->this.execute(x)));
     }
 
     // Arguments 1 - <player>
     @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        if (args.length != getParentCount() + 1) {
-            throw new WrongUsageException(getUsage(sender), (Object) args);
-        }
-        
-        String argPlayer = args[getParentCount()];
-        EntityPlayerMP player = getPlayer(server, sender, argPlayer);
+    public int execute(CommandContext ctx) throws CommandException, CommandSyntaxException {
+        ServerPlayerEntity player = getPlayer(ctx, "player");
         if (player == null) {
-            return;
+            return 0;
         }
         IEntitySkinCapability skinCapability = EntitySkinCapability.get(player);
         if (skinCapability != null) {
@@ -44,5 +43,6 @@ public class CommandWardrobeClearSkins extends ModCommand {
             skinCapability.syncToPlayer(player);
             skinCapability.syncToAllTracking();
         }
+        return 0;
     }
 }

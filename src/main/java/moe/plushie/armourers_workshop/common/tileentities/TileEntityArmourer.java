@@ -22,7 +22,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -141,7 +141,7 @@ public class TileEntityArmourer extends AbstractTileEntityInventory implements I
     }
     
 
-    public void copySkinCubes(EntityPlayerMP player, ISkinPartType srcPart, ISkinPartType desPart, boolean mirror) {
+    public void copySkinCubes(ServerPlayerEntity player, ISkinPartType srcPart, ISkinPartType desPart, boolean mirror) {
         try {
             ArmourerWorldHelper.copySkinCubes(getWorld(), getPos().offset(EnumFacing.UP, HEIGHT_OFFSET), srcPart, desPart, mirror);
         } catch (SkinSaveException e) {
